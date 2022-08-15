@@ -11,15 +11,11 @@ public class UserDaoJDBCImpl implements UserDao {
     private final Connection connection = Util.getConnection();
 
     public UserDaoJDBCImpl() throws SQLException {
-        try {
-            Connection connection = Util.getConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 
     @Override
-    public void createUsersTable() throws SQLException {
+    public void createUsersTable() {
         String tableCreateQuery = "CREATE TABLE IF NOT EXISTS " +
                 "users (id long, name char(255), lastName char(255), age integer);";
         try (Statement statement = connection.createStatement()) {
@@ -68,7 +64,7 @@ public class UserDaoJDBCImpl implements UserDao {
         List<User> users = new ArrayList<>();
         String tableAllUsers = "SELECT name,lastname,age from users";
 
-        try (Statement statement = connection.createStatement()) {
+        try (Statement statement = connection.prepareStatement(tableAllUsers)) {
             ResultSet resultSet = statement.executeQuery(tableAllUsers);
             while (resultSet.next()) {
                 User user = new User();
