@@ -26,7 +26,7 @@ public class Util {
         SessionFactory sessionFactory;
             Configuration configuration = new Configuration()
                     .setProperty("connection.driver_class","com.mysql.jdbc.Driver")
-                    .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false")
+                    .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users")
                     .setProperty("hibernate.connection.username", "root")
                     .setProperty("hibernate.connection.password", "Lkj098hgf765")
                     .addAnnotatedClass(User.class);
