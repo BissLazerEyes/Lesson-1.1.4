@@ -15,6 +15,7 @@ public class Util {
     static String DBNAME = "users";
     static String USERNAME = "root";
     static String PASSWORD = "Lkj098hgf765";
+    private static SessionFactory sessionFactory = null;
 
     public static Connection getConnection() throws SQLException {
         String connectionURL = "jdbc:mysql://" + HOSTNAME + ":3306/" + DBNAME;
@@ -33,5 +34,9 @@ public class Util {
             StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
             sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
+    }
+    public static void singleton(){
+        if (sessionFactory != null)
+            sessionFactory.close();
     }
 }
