@@ -15,7 +15,7 @@ public class Util {
     static String DBNAME = "users";
     static String USERNAME = "root";
     static String PASSWORD = "Lkj098hgf765";
-    private static SessionFactory sessionFactory = null;
+    private static SessionFactory sessionFactory = getSessionFactory();
 
     public static Connection getConnection() throws SQLException {
         String connectionURL = "jdbc:mysql://" + HOSTNAME + ":3306/" + DBNAME;
@@ -35,8 +35,13 @@ public class Util {
             sessionFactory = configuration.buildSessionFactory(builder.build());
         return sessionFactory;
     }
-    public static void singleton(){
-        if (sessionFactory != null)
-            sessionFactory.close();
+    public static void singleton() throws SQLException {
+        if (getSessionFactory() != null) {
+            try {
+                getSessionFactory().close();
+            } catch (Exception e) {
+                throw new SQLException("ошибка");
+            }
+        }
     }
 }
