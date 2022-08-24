@@ -1,6 +1,7 @@
 package jm.task.core.jdbc.util;
 
 import jm.task.core.jdbc.model.User;
+import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -15,7 +16,8 @@ public class Util {
     static String DBNAME = "users";
     static String USERNAME = "root";
     static String PASSWORD = "Lkj098hgf765";
-    private static SessionFactory sessionFactory = getSessionFactory();
+
+    private static SessionFactory sessionFactory;
 
     public static Connection getConnection() throws SQLException {
         String connectionURL = "jdbc:mysql://" + HOSTNAME + ":3306/" + DBNAME;
@@ -24,24 +26,20 @@ public class Util {
     }
 
     public static SessionFactory getSessionFactory() {
-        SessionFactory sessionFactory;
-            Configuration configuration = new Configuration()
-                    .setProperty("connection.driver_class","com.mysql.jdbc.Driver")
-                    .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users")
-                    .setProperty("hibernate.connection.username", "root")
-                    .setProperty("hibernate.connection.password", "Lkj098hgf765")
-                    .addAnnotatedClass(User.class);
-            StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-            sessionFactory = configuration.buildSessionFactory(builder.build());
-        return sessionFactory;
-    }
-    public static void singleton() throws SQLException {
-        if (getSessionFactory() != null) {
+        if (sessionFactory == null) {
             try {
-                getSessionFactory().close();
-            } catch (Exception e) {
-                throw new SQLException("ошибка");
+                Configuration configuration = new Configuration()
+                        .setProperty("connection.driver_class", "com.mysql.jdbc.Driver")
+                        .setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/users")
+                        .setProperty("hibernate.connection.username", "root")
+                        .setProperty("hibernate.connection.password", "Lkj098hgf765")
+                        .addAnnotatedClass(User.class);
+                StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+                sessionFactory = configuration.buildSessionFactory(builder.build());
+            } catch (HibernateException e) {
+                e.printStackTrace();
             }
         }
+        return sessionFactory;
     }
 }
